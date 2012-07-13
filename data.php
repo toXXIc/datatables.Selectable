@@ -33,3 +33,26 @@
 
 
 
+
+
+$page = $_REQUEST['page'];
+$perPage = $_REQUEST['per_page'];
+
+$maxPages = count($data) / $perPage + 1;
+if ($page > $maxPage)
+    $page = $maxPage;
+
+
+$rows = array_slice($data, $page * $perPage, $perPage);
+
+
+$json = array(
+    'iTotalCount' => count($data),
+    'aaData' => $rows
+);
+
+
+echo json_encode($json);
+
+
+
