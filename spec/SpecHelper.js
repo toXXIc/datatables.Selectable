@@ -5,8 +5,7 @@ var dTable = null;
 
 var SELECTION_CLASS = 'selected';
 
-var testTableDefaults = {
-    "aaData": aDataSet,
+var commonDefaults = {
     "aoColumns": [
         { "sTitle": "#" },
         { "sTitle": "Engine" },
@@ -20,6 +19,16 @@ var testTableDefaults = {
     ],
     sDom: 'lfrtipS'
 };
+
+
+var testTableDefaults = $.extend({}, commonDefaults, {
+    "aaData": aDataSet
+});
+
+var remoteTableDefaults = $.extend({}, commonDefaults, {
+    "bServerSide": true,
+    "sAjaxSource": "data.php"
+});
 
 
 // Returns cells for specified column
@@ -51,6 +60,17 @@ function initDataTable(selectableOpts, tableOpts) {
     dTable = $('#tbl').dataTable(options);
 }
 
+
+function initRemoteDataTable(selectableOpts, tableOpts) {
+    $table = $('<table class="styled" id="tbl"></table>');
+    $table.appendTo($('.tbl_container'));
+
+    var options = $.extend({}, remoteTableDefaults, tableOpts);
+    if (selectableOpts)
+        options.oSelectable = selectableOpts;
+
+    dTable = $('#tbl').dataTable(options);
+}
 
 function removeDataTable() {
     $('.tbl_container').html('');

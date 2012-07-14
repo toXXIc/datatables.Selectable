@@ -33,26 +33,16 @@
 
 
 
+$displayStart = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : 0;
+$displayLength = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : 10;
 
-
-$page = $_REQUEST['page'];
-$perPage = $_REQUEST['per_page'];
-
-$maxPages = count($data) / $perPage + 1;
-if ($page > $maxPage)
-    $page = $maxPage;
-
-
-$rows = array_slice($data, $page * $perPage, $perPage);
-
+$rows = array_slice($data, $displayStart, $displayLength);
 
 $json = array(
-    'iTotalCount' => count($data),
+    'iTotalRecords' => count($data),
+    'iTotalDisplayRecords' => count($rows),
     'aaData' => $rows
 );
 
 
 echo json_encode($json);
-
-
-
