@@ -97,7 +97,7 @@
 
     Selection.prototype.fnClear = function() {
         this._aoData = [];
-        this._oSelectable._fnUpdateAll();
+        this._oSelectable._fnClearSelection();
     };
 
 
@@ -234,8 +234,11 @@
     };
 
 
-    Selectable.prototype._fnUpdateAll = function() {
-        this.oTable.fnDraw(false);
+    Selectable.prototype._fnClearSelection = function() {
+        var $rows = this.oTable.$('tr');
+
+        for(var i = 0, count = $rows.length; i < count; i++)
+            this._fnSetRowAppearance($($rows[i]), false);
 
         this._fnUpdateCounter();
     };
