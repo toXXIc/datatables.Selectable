@@ -13,6 +13,8 @@ Usage
 You can see the demo in examples.html.
 
 
+!!! If you use data from server, you should provide ID column for each row to make selection work properly.
+
 Plugin options
 --------------
 

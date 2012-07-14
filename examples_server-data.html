@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>datatables.Selectable - Examples</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+    <script type="text/javascript" src="lib/jquery.js"></script>
+    <script type="text/javascript" src="lib/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="spec/sampleData.js"></script>
+    <script type="text/javascript" src="src/datatables.Selectable.js"></script>
+</head>
+
+<body>
+<div id="content">
+    <div class="wrapper">
+        <div class="title-box">
+            <h1>Selectable feature for DataTables</h1>
+            A feature plugin for DataTables that makes table rows selectable.
+        </div>
+        <h2>Examples</h2>
+        <p></p>
+        <div class="box">
+            <table border="0" class="styled" id="example" width="100%"></table>
+        </div>
+        <code>
+        TODO: code examples
+        </code>
+        <hr/>
+    </div>
+    <br/>
+</div>
+
+<script type="text/javascript">
+$(function(){
+    var dt = $('#example').dataTable({
+        "bServerSide": true,
+        "sAjaxSource": "data.php",
+
+        "aoColumns": [
+            { "sTitle": "Engine" },
+            { "sTitle": "Cost" },
+            { "sTitle": "Platform" },
+            { "sTitle": "Version", "sClass": "center" },
+            {
+                "sTitle": "Grade",
+                "sClass": "center"
+            }
+        ],
+        sDom: '	lfrtipS',
+        sServerMethod: 'POST',
+        oSelectable: {
+            idColumn: 'id'
+        }
+    });
+});
+</script>
+</body>
+</html>

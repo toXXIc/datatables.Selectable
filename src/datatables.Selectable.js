@@ -188,13 +188,13 @@
         var $check = $cell.find('input:checkbox');
         if ($check.length == 0) {
             $check = $('<input type="checkbox" />');
-            if (this.oSelection.fnIsSelected(aData))
-                $check.attr('checked', 'checked');
-            
             $check.change(this, // Custom data - dataTable
                 this._oSelectable._onCheckboxChanged);
 
             $cell.empty().append($check);
+            if (this.oSelection.fnIsSelected(aData))
+                this._oSelectable._fnSetRowAppearance($row, true);
+            //    $check.attr('checked', 'checked');
         }
     };
 

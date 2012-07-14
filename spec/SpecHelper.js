@@ -143,10 +143,15 @@ beforeEach(function() {
 
             this.message = function () {
                 var exp = '';
-                if (!hasClass)
-                    exp += ' Row should have "' + SELECTION_CLASS + '" class. ';
-                if (!isChecked)
-                    exp += ' Row should have checked checkbox in column ' + colNum + '.';
+
+                if ($check.length == 0)
+                    exp = 'Checkbox is not found in row #' + $row.index();
+                else {
+                    if (!hasClass)
+                        exp += ' Row should have "' + SELECTION_CLASS + '" class. ';
+                    if (!isChecked)
+                        exp += ' Row should have checked checkbox in column ' + colNum + '.';
+                }
                     
                 return "Expectations for row #" + $row.index() + ":" + exp;// to have '" + SELECTION_CLASS + "' class and to contain checked checkbox in column " + colNum;
             };
@@ -164,10 +169,16 @@ beforeEach(function() {
             
             this.message = function () {
                 var exp = '';
-                if (hasClass)
-                    exp += ' Row shouldn\'t have "' + SELECTION_CLASS + '" class. ';
-                if (isChecked)
-                    exp += ' Row shouldn\'t have checked checkbox in column ' + colNum + '.';
+
+                if ($check.length == 0)
+                    exp = 'Checkbox is not found in row #' + $row.index();
+                else {
+                    if (hasClass)
+                        exp += ' Row shouldn\'t have "' + SELECTION_CLASS + '" class. ';
+                    if (isChecked)
+                        exp += ' Row shouldn\'t have checked checkbox in column ' + colNum + '.';
+                }
+
                 return "Expectations for row #" + $row.index() + ":" + exp;// to have no '" + SELECTION_CLASS + "' class and to contain unchecked checkbox in column " + colNum;
             };
 

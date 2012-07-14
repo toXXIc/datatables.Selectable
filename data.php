@@ -38,9 +38,10 @@ $displayLength = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'
 
 $rows = array_slice($data, $displayStart, $displayLength);
 
+// Filtering is not implemnted, so we should return the same rows number for TotalRecords and for TotalDisplayRecords.
 $json = array(
     'iTotalRecords' => count($data),
-    'iTotalDisplayRecords' => count($rows),
+    'iTotalDisplayRecords' => count($data),
     'aaData' => $rows
 );
 
