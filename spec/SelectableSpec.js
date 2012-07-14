@@ -42,6 +42,33 @@ describe("DataTables.Selectable (default options)", function() {
         expect($checkbox.closest('tr').hasClass(SELECTION_CLASS)).toBe(true);
     });
 
+
+    it('shows selection controls by default', function() {
+        var $controls = $('.dataTables_selectionControls');
+
+        expect($controls.length).toBe(1);
+    });
+
+
+    it('updates selection counter when selection changes', function(){
+        selectionAdd(2);
+        selectionAdd(4);
+
+        var count = parseInt(dTable._oSelectable.nCounter.innerHTML);
+
+        expect(count).toEqual(dTable.oSelection.fnGetSize());
+    });
+
+
+    it('clears selection when Clear Selection link is clicked', function(){
+        selectionAdd(2);
+        selectionAdd(4);
+
+        $(dTable._oSelectable.nControls).find('a.selection_clear').click();
+
+        expect(dTable.oSelection.fnGetSize()).toBe(0);
+    });
+
 });
 
 // =================================================
@@ -56,6 +83,13 @@ describe("DataTables.Selectable (custom options)", function() {
         var $checkboxes = findColCheckboxes(2);
 	
 		expect($checkboxes.length).toBe($colCells.length);
+    });
+
+
+    it("doesn't show selection controls when bShowControls = false", function(){
+        var $controls = $('.dataTables_selectionControls');
+
+        expect($controls.length).toBe(0);
     });
 });
 
