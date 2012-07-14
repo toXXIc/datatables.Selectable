@@ -5,8 +5,15 @@
         sSelectedRowClass:'selected',
         idColumn: null,
         sControlsClass: 'dataTables_selectionControls',
-        bShowControls: true
+        bShowControls: true,
+
+        // Maybe, I18n options should be moved to another place.
+        oLanguage: {
+            sSelectedRows: 'Selected rows: _COUNT_',
+            sClearSelection: 'Clear selection'
+        }
     };
+
 
     function getKeys(hash) {
         var keys = [];
@@ -117,18 +124,18 @@
         this.nCounter = null;
         if (this.options.bShowControls)
         {
-            var $controls = $('<div>Selected rows: <span class="dataTables_selectionCounter"></span> | </div>');
+            var $controls = $('<div><span class="selection_counter"></span> | </div>');
             $controls.addClass(this.options.sControlsClass);
 
-            var $counter = $controls.find('.dataTables_selectionCounter');
-            var $resetLink = $('<a class="selection_clear">Clear selection</a>');
+            var $counter = $controls.find('.selection_counter');
+            var $resetLink = $('<a class="selection_clear">' + this.options.oLanguage.sClearSelection + '</a>');
             $resetLink.click(function(evt) {
                 dTable.oSelection.fnClear();
             });
 
             $controls.append($resetLink);
 
-
+            // Save nodes to Selectable object.
             this.nCounter = $counter[0];
             this.nControls = $controls[0];
 
@@ -222,7 +229,8 @@
         if (!this.nCounter)
             return;
 
-        this.nCounter.innerHTML = this.oSelection.fnGetSize();
+        this.nCounter.innerHTML = this.options.oLanguage.sSelectedRows.replace('_COUNT_',
+                                        this.oSelection.fnGetSize());
     };
 
 

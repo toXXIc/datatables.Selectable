@@ -54,9 +54,9 @@ describe("DataTables.Selectable (default options)", function() {
         selectionAdd(2);
         selectionAdd(4);
 
-        var count = parseInt(dTable._oSelectable.nCounter.innerHTML);
+        var text = dTable._oSelectable.nCounter.innerHTML;
 
-        expect(count).toEqual(dTable.oSelection.fnGetSize());
+        expect(text).toEqual("Selected rows: 2");
     });
 
 
@@ -87,9 +87,29 @@ describe("DataTables.Selectable (custom options)", function() {
 
 
     it("doesn't show selection controls when bShowControls = false", function(){
+        initDataTable({bShowControls: false});
+
         var $controls = $('.dataTables_selectionControls');
 
         expect($controls.length).toBe(0);
+    });
+
+
+    it("supports i18n for 'Selected rows' text and 'Clear selection' link", function() {
+        initDataTable({oLanguage: {
+                sSelectedRows: 'Выбрано строк: _COUNT_',
+                sClearSelection: 'Очистить выделение'
+            }
+        });
+
+        selectionAdd(2);
+
+        var $controls = $('.dataTables_selectionControls');
+        var $link = $controls.find('a.selection_clear');
+        var $counter = $controls.find('.selection_counter');
+
+        expect($link.text()).toBe('Очистить выделение');
+        expect($counter.text()).toBe('Выбрано строк: 1');
     });
 });
 
@@ -245,8 +265,5 @@ describe('oSelection (with idColumn)', function() {
         
         expect($row).toBeCheckedRow();
     });
-    
-    
-    
-    
+
 });
