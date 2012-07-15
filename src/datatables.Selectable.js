@@ -7,7 +7,7 @@
         sControlsClass: 'dataTables_selectionControls',
         bShowControls: true,
 
-        // Maybe, I18n options should be moved to another place.
+        // TODO: Maybe, I18n options should be moved to another place.
         oLanguage: {
             sSelectedRows: 'Selected rows: _COUNT_',
             sClearSelection: 'Clear selection'
@@ -15,6 +15,11 @@
     };
 
 
+    /**
+     * Returns an array that contains all keys from specitfied hash.
+     * @param hash Hash which keys should be collected into array.
+     * @return Array Array that contains all keys of specified hash.
+     */
     function getKeys(hash) {
         var keys = [];
         for (var i in hash) if (hash.hasOwnProperty(i))
@@ -24,6 +29,10 @@
     }
 
 
+    /**
+     * Object that provides methods to work with selected rows.
+     * @param parentSelectable A parent Selectable object.
+     */
     function Selection(parentSelectable) {
         // _aoData contains row data objects when idColumn is not set and 
         // contains values of idColumn when it's set.
@@ -32,22 +41,40 @@
         this._idColumn = null;
     }
 
-    Selection.prototype._fnUpdate = function (oData) {
+
+    /**
+     * Updates row, assodiated with provided record data or record ID.
+     * @param mData Record data or ID 
+     */
+    Selection.prototype._fnUpdate = function (mData) {
         // Notify oSelectable about data change
-        this._oSelectable._fnUpdate(oData);
+        this._oSelectable._fnUpdate(mData);
     };
 
 
-    // Use this method to get selected data.
+    /**
+     * Returns an array that contains data or record IDs of selected rows.
+     * @return Array Array with selected data or record IDs.
+     */ 
     Selection.prototype.fnGetData = function () {
         return this._aoData;
     };
 
+
+    /**
+     * Returns total number of selected rows.
+     * @return integer Total number of selected rows.
+     */
     Selection.prototype.fnGetSize = function () {
         return this._aoData.length;
     };
 
     
+    /**
+     * Checks if the row identified by passed row data or row ID is selected.
+     * @param mData Row data or record ID.
+     * @return True if passed row data or record ID is in the selection.
+     */
     Selection.prototype.fnIsSelected = function (mData) {
         if (this._idColumn) {
             if (typeof mData == 'object')
@@ -63,10 +90,10 @@
 
 
     /**
-     * Adds data to selection and updates appearance of representing row.
+     * Adds data to selection and updates appearance of associated row.
+     * When options 'idColumn' is set and mData is a row data object, 
+     * only value of ID column will be stored in selection.
      * @param mData Data which should be stored in selection array.
-     *              When idColumn is set and mData is a row data object,
-     *              only value of ID column is stored.
      */
     Selection.prototype.fnAdd = function (mData) {
         if (this._idColumn) {
@@ -78,7 +105,10 @@
         this._fnUpdate(mData);
     };
 
-
+    /**
+     * Removes data from selection and updates appearance of associated row.
+     * @param mData Row data or record ID which should be removed from selection.
+     */
     Selection.prototype.fnRemove = function (mData) {
         if (this._idColumn) {
             if (typeof mData == 'object')
@@ -95,16 +125,21 @@
     };
 
 
+    /**
+     * Clears the selection.
+     */
     Selection.prototype.fnClear = function() {
         this._aoData = [];
-        this._oSelectable._fnClearSelection();
+        this._oSelectable._fnUnselectAll();
     };
 
 
 
 // ------------------------------------------------------
 
-
+    /**
+     * Selectable object provides interaction between Selection and DataTable.
+     */
     function Selectable(oDTSettings, options) {
         var dTable = oDTSettings.oInstance; // Should be local variable
         this.oTable = dTable;
@@ -225,6 +260,9 @@
     };
 
 
+    /**
+     * Updates selection size indicator if selection controls are enabled.
+     */
     Selectable.prototype._fnUpdateCounter = function(){
         if (!this.nCounter)
             return;
@@ -233,8 +271,12 @@
                                         this.oSelection.fnGetSize());
     };
 
-
-    Selectable.prototype._fnClearSelection = function() {
+    /**
+     * Changes appearance of all rows and maked them look like unselected.
+     * Method changes only visual state of all rows, but selection remains 
+     * the same.
+     */
+    Selectable.prototype._fnUnselectAll = function() {
         var $rows = this.oTable.$('tr');
 
         for(var i = 0, count = $rows.length; i < count; i++)
@@ -244,6 +286,9 @@
     };
 
 
+    /**
+     * Callback that is bound to RowCallback.
+     */
     Selectable.prototype._fnRowCallback = function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         var opts = this._oSelectable.options; // this -> dataTable
         var $row = $(nRow);
@@ -262,6 +307,9 @@
     };
 
 
+    /**
+     * Initializes plugin.
+     */
     Selectable.prototype._fnInit = function () {
         // Register callback that will render checkboxes.
         this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoRowCallback',

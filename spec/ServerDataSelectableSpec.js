@@ -3,7 +3,6 @@ describe("DataTables.Selectable (server data with ID column)", function() {
     var loadingData = false;
 
     beforeEach(function () {
-
         initRemoteDataTable({idColumn: 'id'},
             {
                 // It seems that sometimes fnDrawCallback is called before selected checkbox appearance is updated
