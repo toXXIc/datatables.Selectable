@@ -1,9 +1,16 @@
+/*
+ * Selectable is a feature plugin that adds ability to select rows in a datatable.
+ *
+ * Author:      Basil Gren
+ * License:     MIT
+ * Version:     1.0.0 (15-Jul-2012)
+ */
 (function ($) {
 
     var defaults = {
         iColNumber:1,
         sSelectedRowClass:'selected',
-        idColumn: null,
+        sIdColumnName: null,
         sControlsClass: 'dataTables_selectionControls',
         bShowControls: true,
 
@@ -34,11 +41,11 @@
      * @param parentSelectable A parent Selectable object.
      */
     function Selection(parentSelectable) {
-        // _aoData contains row data objects when idColumn is not set and 
-        // contains values of idColumn when it's set.
+        // _aoData contains row data objects when sIdColumnName is not set and 
+        // contains values of sIdColumnName when it's set.
         this._aoData = [];
         this._oSelectable = parentSelectable;
-        this._idColumn = null;
+        this._sIdColumnName = null;
     }
 
 
@@ -76,9 +83,9 @@
      * @return True if passed row data or record ID is in the selection.
      */
     Selection.prototype.fnIsSelected = function (mData) {
-        if (this._idColumn) {
+        if (this._sIdColumnName) {
             if (typeof mData == 'object')
-                mData = mData[this._idColumn];
+                mData = mData[this._sIdColumnName];
         }
     
         for (var i = 0, count = this._aoData.length; i < count; i++)
@@ -91,14 +98,14 @@
 
     /**
      * Adds data to selection and updates appearance of associated row.
-     * When options 'idColumn' is set and mData is a row data object, 
+     * When options 'sIdColumnName' is set and mData is a row data object, 
      * only value of ID column will be stored in selection.
      * @param mData Data which should be stored in selection array.
      */
     Selection.prototype.fnAdd = function (mData) {
-        if (this._idColumn) {
+        if (this._sIdColumnName) {
             if (typeof mData == 'object')
-                mData = mData[this._idColumn];
+                mData = mData[this._sIdColumnName];
         }
             
         this._aoData.push(mData);
@@ -110,9 +117,9 @@
      * @param mData Row data or record ID which should be removed from selection.
      */
     Selection.prototype.fnRemove = function (mData) {
-        if (this._idColumn) {
+        if (this._sIdColumnName) {
             if (typeof mData == 'object')
-                mData = mData[this._idColumn];
+                mData = mData[this._sIdColumnName];
         }
     
         for (var i = 0, count = this._aoData.length; i < count; i++) {
@@ -150,7 +157,7 @@
         // Add oSelection object to current datatable instance.
         this.oSelection = new Selection(this);
         dTable.oSelection = this.oSelection;
-        this.oSelection._idColumn = options.idColumn;
+        this.oSelection._sIdColumnName = options.sIdColumnName;
 
         // Also, store Selectable object in current instance
         dTable._oSelectable = this;
@@ -234,7 +241,7 @@
         // Find row number for data
         // TODO: make sure that this approach will work in any cases.
         var allData = this.oTable.fnGetData();
-        var iRow = 0, count, idColName = this.options.idColumn;
+        var iRow = 0, count, idColName = this.options.sIdColumnName;
 
         if (idColName)
         {

@@ -194,11 +194,11 @@ describe("oSelection", function() {
 
 
 
-describe('oSelection (with idColumn)', function() {
+describe('oSelection (with sIdColumnName)', function() {
     var selection = null; // oSelection shortcut
 
     beforeEach(function () {
-        initDataTable({idColumn: 'id'}, {"aaData": aDataSetWithID});
+        initDataTable({sIdColumnName: 'id'}, {"aaData": aDataSetWithID});
 
         selection = dTable.oSelection;
     });
