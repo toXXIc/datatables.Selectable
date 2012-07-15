@@ -13,6 +13,7 @@
         sIdColumnName: null,
         sControlsClass: 'dataTables_selectionControls',
         bShowControls: true,
+        bSingleRowSelect: false,
 
         // TODO: Maybe, I18n options should be moved to another place.
         oLanguage: {
@@ -103,6 +104,9 @@
      * @param mData Data which should be stored in selection array.
      */
     Selection.prototype.fnAdd = function (mData) {
+        if (this._oSelectable.options.bSingleRowSelect)
+            this.fnClear();
+
         if (this._sIdColumnName) {
             if (typeof mData == 'object')
                 mData = mData[this._sIdColumnName];

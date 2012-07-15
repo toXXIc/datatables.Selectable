@@ -69,6 +69,12 @@ describe("DataTables.Selectable (default options)", function() {
         expect(dTable.oSelection.fnGetSize()).toBe(0);
     });
 
+
+    it('shows Select All checkbox in header by default.', function(){
+        // TODO: implement
+        //expect(0).toBe(1);
+    });
+
 });
 
 // =================================================
@@ -110,6 +116,17 @@ describe("DataTables.Selectable (custom options)", function() {
 
         expect($link.text()).toBe('Очистить выделение');
         expect($counter.text()).toBe('Выбрано строк: 1');
+    });
+
+
+    it('selects only one row when bSingleRowSelect is true', function(){
+        initDataTable({bSingleRowSelect: true, sIdColumnName:'id'}, {aaData: aDataSetWithID});
+
+        selectionAdd(2);  // Row index 2 - ID = 3
+        selectionAdd(4);  // Row index 4 - ID = 5
+
+        var selected = dTable.oSelection.fnGetData();
+        expect(selected).toEqual([5]);
     });
 });
 
