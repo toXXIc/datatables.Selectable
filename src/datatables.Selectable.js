@@ -14,6 +14,7 @@
         sControlsClass: 'dataTables_selectionControls',
         bShowControls: true,
         bSingleRowSelect: false,
+        bSelectAllCheckbox: false,
 
         // TODO: Maybe, I18n options should be moved to another place.
         oLanguage: {
@@ -166,6 +167,8 @@
         // Also, store Selectable object in current instance
         dTable._oSelectable = this;
 
+        this.$selectAll = null;
+
         this.nControls = null;
         this.nCounter = null;
         if (this.options.bShowControls)
@@ -190,6 +193,42 @@
 
         this._fnInit();
     }
+
+
+    /**
+     * Initializes plugin.
+     */
+    Selectable.prototype._fnInit = function () {
+        var that = this;
+
+        if (this.options.bSelectAllCheckbox)
+        this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoInitComplete',
+            function() {
+                var $cell = $(that.oDTSettings.nTHead).find('tr :nth-child(' + that.options.iColNumber + ')');
+                var $selectAll = $('<input type="checkbox" />');
+                that.$selectAll = $selectAll;
+
+                $selectAll.groupToggle({
+                    groupParent: $(that.oDTSettings.nTBody)
+                });
+
+                $cell.html($selectAll);
+            }, 'SelectableInitCallback');
+
+
+        // Register callback that will render checkboxes.
+        this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoRowCallback',
+            this._fnRowCallback, 'SelectableRowCallback');
+
+        this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoDrawCallback',
+            function(){
+                if (that.$selectAll)
+                    that.$selectAll.groupToggle('update');
+            }, 'SelectableDrawCallback');
+
+        // Redraw the whole table without refiltering and resorting.
+        this.oDTSettings.oInstance.fnDraw(false);
+    };
 
 
     /**
@@ -315,19 +354,6 @@
             if (this.oSelection.fnIsSelected(aData))
                 this._oSelectable._fnSetRowAppearance($row, true);
         }
-    };
-
-
-    /**
-     * Initializes plugin.
-     */
-    Selectable.prototype._fnInit = function () {
-        // Register callback that will render checkboxes.
-        this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoRowCallback',
-            this._fnRowCallback, 'SelectableRowCallback');
-
-        // Redraw the whole table without refiltering and resorting.
-        this.oDTSettings.oInstance.fnDraw(false);
     };
 
 

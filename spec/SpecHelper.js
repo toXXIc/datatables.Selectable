@@ -124,6 +124,16 @@ function getRowCheckbox(rowNum)
 }
 
 
+function getSelectAllCheckbox(column)
+{
+    if (!column)
+        column = 1;
+
+    var $cell = $table.find('thead tr :nth-child(' + column + ')'); // First column by default
+    return $cell.find('input[type="checkbox"]');
+}
+
+
 // ---------------------------------------------
 beforeEach(function() {
     this.addMatchers({

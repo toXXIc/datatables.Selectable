@@ -68,13 +68,6 @@ describe("DataTables.Selectable (default options)", function() {
 
         expect(dTable.oSelection.fnGetSize()).toBe(0);
     });
-
-
-    it('shows Select All checkbox in header by default.', function(){
-        // TODO: implement
-        //expect(0).toBe(1);
-    });
-
 });
 
 // =================================================
@@ -128,6 +121,38 @@ describe("DataTables.Selectable (custom options)", function() {
         var selected = dTable.oSelection.fnGetData();
         expect(selected).toEqual([5]);
     });
+
+
+    it('shows Select All checkbox in header when bSelectAllCheckbox is set.', function() {
+        initDataTable({bSelectAllCheckbox: true});
+        var $input = getSelectAllCheckbox();
+
+        expect($input.length).toBe(1);
+    });
+
+    it('selects all rows on a page when Select All checkbox is clicked', function (){
+        initDataTable({bSelectAllCheckbox: true});
+        var $selectAll = getSelectAllCheckbox();
+        $selectAll.click();
+
+        var $checkboxes = findColCheckboxes();
+        var $checked = $checkboxes.filter(':checked');
+
+        expect($checked.length).toBe($checkboxes.length);
+    });
+
+
+    it('unchecks Select All checkbox when one row is deselected after all rows are selected', function (){
+        initDataTable({bSelectAllCheckbox: true});
+        var $selectAll = getSelectAllCheckbox();
+        $selectAll.click();
+
+        var $checkboxes = findColCheckboxes();
+        $($checkboxes[1]).click();
+
+        expect($selectAll.is(':checked')).toBe(false);
+    });
+
 });
 
 

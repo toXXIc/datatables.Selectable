@@ -11,6 +11,7 @@
     <script type="text/javascript" src="lib/jquery.dataTables.js"></script>
     <script type="text/javascript" src="spec/sampleData.js"></script>
     <script type="text/javascript" src="src/datatables.Selectable.js"></script>
+    <script type="text/javascript" src="src/jquery.groupToggle.js"></script>
 </head>
 
 <body>
@@ -38,7 +39,7 @@ $(function(){
     var dt = $('#example').dataTable({
         "aaData": aDataSet,
         "aoColumns": [
-            { "sTitle": "Engine" },
+            { "sTitle": "Engine", bSortable: false },
             { "sTitle": "Cost" },
             { "sTitle": "Platform" },
             { "sTitle": "Version", "sClass": "center" },
@@ -47,7 +48,11 @@ $(function(){
                 "sClass": "center"
             }
         ],
-        sDom: '	lfrtipS'
+        sDom: '	lfrtipS',
+
+        oSelectable: {
+            bSelectAllCheckbox: true
+        }
     });
 });
 </script>
