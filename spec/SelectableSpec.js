@@ -153,6 +153,31 @@ describe("DataTables.Selectable (custom options)", function() {
         expect($selectAll.is(':checked')).toBe(false);
     });
 
+
+    it('selects a row after click on a cell containing selection checkbox when sSelectTrigger = "cell"', function(){
+        initDataTable({sSelectTrigger: 'cell', sIdColumnName:'id'}, {aaData: aDataSetWithID});
+
+        var $checkboxes = findColCheckboxes();
+        var $cell = $($checkboxes[1]).closest('td');
+        $cell.click();
+
+        var selected = dTable.oSelection.fnGetData();
+        expect(selected).toEqual([2]);
+    });
+
+
+    it('selects a row after click on any cell of the row when sSelectTrigger = "row"', function(){
+        initDataTable({sSelectTrigger: 'row', sIdColumnName:'id'}, {aaData: aDataSetWithID});
+
+        var $checkboxes = findColCheckboxes();
+        var $row = $($checkboxes[1]).closest('tr');
+        $row.find('td:nth-child(3)').click();
+
+        var selected = dTable.oSelection.fnGetData();
+        expect(selected).toEqual([2]);
+    });
+
+
 });
 
 

@@ -8,15 +8,18 @@
 (function ($) {
 
     var defaults = {
-        iColNumber:1,
-        sSelectedRowClass:'selected',
-        sIdColumnName: null,
-        sControlsClass: 'dataTables_selectionControls',
-        bShowControls: true,
-        bSingleRowSelect: false,
+        iColNumber:         1,
+        sIdColumnName:      null,
+        bShowControls:      true,
+        bSingleRowSelect:   false,
         bSelectAllCheckbox: false,
+        sSelectTrigger:     'checkbox', // Available options: 'checkbox', 'cell', 'row'
 
-        // TODO: Maybe, I18n options should be moved to another place.
+        // Classes customization
+        sSelectedRowClass:'selected',
+        sControlsClass: 'dataTables_selectionControls',
+
+        // I18n options
         oLanguage: {
             sSelectedRows: 'Selected rows: _COUNT_',
             sClearSelection: 'Clear selection'
@@ -178,7 +181,7 @@
 
             var $counter = $controls.find('.selection_counter');
             var $resetLink = $('<a class="selection_clear">' + this.options.oLanguage.sClearSelection + '</a>');
-            $resetLink.click(function(evt) {
+            $resetLink.on('click', function() {
                 dTable.oSelection.fnClear();
             });
 
@@ -345,15 +348,39 @@
         var $cell = $row.find('td:nth-child(' + opts.iColNumber + ')');
 
         var $check = $cell.find('input:checkbox');
-        if ($check.length == 0) {
-            $check = $('<input type="checkbox" />');
-            $check.change(this, // Custom data - dataTable
-                this._oSelectable._onCheckboxChanged);
+        if ($check.length != 0)
+            return;
 
-            $cell.empty().append($check);
-            if (this.oSelection.fnIsSelected(aData))
-                this._oSelectable._fnSetRowAppearance($row, true);
+        // Create checkbox and bind handler
+        $check = $('<input type="checkbox" />');
+        $check.on('change',
+                  this, // Custom data - this points to DataTable object
+                  this._oSelectable._onCheckboxChanged);
+
+        // Now check sSelectTrigger and bind additional handlers if necessary.
+        var $trigger = null;
+        if (opts.sSelectTrigger == 'cell')
+            $trigger = $cell;
+        else if (opts.sSelectTrigger == 'row')
+            $trigger = $row;
+
+        if ($trigger) {
+            $check.on('click', function(evt){
+                // Stop event bubbling as it will cause infinite loop in $trigger click handler,
+                // when we imitate click on the checkbox ($checkbox.click()).
+                evt.stopPropagation();
+            });
+
+            // Performance??? Consider replacing by .on handler, bound to tbody.
+            $trigger.on('click', function(evt) {
+                // Click checkbox to toggle it.
+                $check.click();
+            });
         }
+
+        $cell.empty().append($check);
+        if (this.oSelection.fnIsSelected(aData))
+            this._oSelectable._fnSetRowAppearance($row, true);
     };
 
 
@@ -372,9 +399,9 @@
             return selectable.nControls;
         },
 
-        cFeature:"S",
+        cFeature: "S",
 
-        sFeature:"Selectable"
+        sFeature: "Selectable"
     });
 
 
