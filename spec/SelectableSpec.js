@@ -118,7 +118,7 @@ describe("DataTables.Selectable (custom options)", function() {
         selectionAdd(2);  // Row index 2 - ID = 3
         selectionAdd(4);  // Row index 4 - ID = 5
 
-        var selected = dTable.oSelection.fnGetData();
+        var selected = dTable.oSelection.fnGetIds();
         expect(selected).toEqual([5]);
     });
 
@@ -161,7 +161,7 @@ describe("DataTables.Selectable (custom options)", function() {
         var $cell = $($checkboxes[1]).closest('td');
         $cell.click();
 
-        var selected = dTable.oSelection.fnGetData();
+        var selected = dTable.oSelection.fnGetIds();
         expect(selected).toEqual([2]);
     });
 
@@ -173,7 +173,7 @@ describe("DataTables.Selectable (custom options)", function() {
         var $row = $($checkboxes[1]).closest('tr');
         $row.find('td:nth-child(3)').click();
 
-        var selected = dTable.oSelection.fnGetData();
+        var selected = dTable.oSelection.fnGetIds();
         expect(selected).toEqual([2]);
     });
 
@@ -276,7 +276,7 @@ describe('oSelection (with sIdColumnName)', function() {
         var data1 = selectionAdd(3);
         var data2 = selectionAdd(5);
         
-        expect(selection.fnGetData()).toEqual([data1.id, data2.id]);
+        expect(selection.fnGetIds()).toEqual([data1.id, data2.id]);
     });
 
 
@@ -284,7 +284,7 @@ describe('oSelection (with sIdColumnName)', function() {
         selection.fnAdd(3);
         selection.fnAdd(6);
         
-        expect(selection.fnGetData()).toEqual([3,6]);
+        expect(selection.fnGetIds()).toEqual([3,6]);
     });
 
 
@@ -302,7 +302,7 @@ describe('oSelection (with sIdColumnName)', function() {
         
         selection.fnRemove(data1);
         
-        expect(selection.fnGetData()).toEqual([data2.id]);
+        expect(selection.fnGetIds()).toEqual([data2.id]);
     });
 
 
@@ -312,7 +312,7 @@ describe('oSelection (with sIdColumnName)', function() {
         
         selection.fnRemove(16);
         
-        expect(selection.fnGetData()).toEqual([3]);
+        expect(selection.fnGetIds()).toEqual([3]);
     });
 
 

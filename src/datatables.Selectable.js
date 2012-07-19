@@ -8,21 +8,23 @@
 (function ($) {
 
     var defaults = {
-        iColNumber:         1,
-        sIdColumnName:      null,
-        bShowControls:      true,
-        bSingleRowSelect:   false,
-        bSelectAllCheckbox: false,
-        sSelectTrigger:     'checkbox', // Available options: 'checkbox', 'cell', 'row'
+        iColNumber:         1,          // Number of columns that will contain selection checkboxes.
+        sIdColumnName:      null,       // Name of column that contains unique record ID.
+        bShowControls:      true,       // Determines if selection controls (size etc) will be shown
+        bSingleRowSelect:   false,      // Set to true if only one row at a time can be selected
+        bSelectAllCheckbox: false,      // When true, a checkbox will be rendered in column header,
+                                          // which will select/deselect all rows on current page
+        sSelectTrigger:     'checkbox', // Determines an area which should be clicked to select a row.
+                                          // Available options: 'checkbox', 'cell', 'row'
 
         // Classes customization
-        sSelectedRowClass:'selected',
-        sControlsClass: 'dataTables_selectionControls',
+        sSelectedRowClass:'selected',   // A class which will be added to <tr> element of selected rows.
+        sControlsClass: 'dataTables_selectionControls', // Default class for selection controls.
 
         // I18n options
         oLanguage: {
-            sSelectedRows: 'Selected rows: _COUNT_',
-            sClearSelection: 'Clear selection'
+            sSelectedRows: 'Selected rows: _COUNT_', // Text for selection size counter
+            sClearSelection: 'Clear selection'       // Text for 'Clear selection' link
         }
     };
 
@@ -55,7 +57,7 @@
 
 
     /**
-     * Updates row, assodiated with provided record data or record ID.
+     * Updates row, associated with provided record data or record ID.
      * @param mData Record data or ID 
      */
     Selection.prototype._fnUpdate = function (mData) {
@@ -65,11 +67,28 @@
 
 
     /**
-     * Returns an array that contains data or record IDs of selected rows.
-     * @return Array Array with selected data or record IDs.
+     * Returns an array that contains data of selected rows.
+     * When sIdColumnName is specified, this method returns null.
+     * @return Array Array with selected data.
      */ 
     Selection.prototype.fnGetData = function () {
+        if (this._sIdColumnName)
+            return null;
+
         return this._aoData;
+    };
+
+
+    /**
+     * Returns an array that contains record IDs of selected rows.
+     * This method returns null when sIdColumnName is NOT specified.
+     * @return Array Array with selected record IDs.
+     */
+    Selection.prototype.fnGetIds = function () {
+        if (this._sIdColumnName)
+            return this._aoData;
+
+        return null;
     };
 
 
@@ -119,6 +138,7 @@
         this._aoData.push(mData);
         this._fnUpdate(mData);
     };
+
 
     /**
      * Removes data from selection and updates appearance of associated row.
@@ -323,6 +343,7 @@
         this.nCounter.innerHTML = this.options.oLanguage.sSelectedRows.replace('_COUNT_',
                                         this.oSelection.fnGetSize());
     };
+
 
     /**
      * Changes appearance of all rows and maked them look like unselected.
