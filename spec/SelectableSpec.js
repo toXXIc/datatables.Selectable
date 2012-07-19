@@ -154,8 +154,8 @@ describe("DataTables.Selectable (custom options)", function() {
     });
 
 
-    it('selects a row after click on a cell containing selection checkbox when sSelectTrigger = "cell"', function(){
-        initDataTable({sSelectTrigger: 'cell', sIdColumnName:'id'}, {aaData: aDataSetWithID});
+    it('selects a row after click on a cell containing selection checkbox when sSelectionTrigger = "cell"', function(){
+        initDataTable({sSelectionTrigger: 'cell', sIdColumnName:'id'}, {aaData: aDataSetWithID});
 
         var $checkboxes = findColCheckboxes();
         var $cell = $($checkboxes[1]).closest('td');
@@ -166,8 +166,8 @@ describe("DataTables.Selectable (custom options)", function() {
     });
 
 
-    it('selects a row after click on any cell of the row when sSelectTrigger = "row"', function(){
-        initDataTable({sSelectTrigger: 'row', sIdColumnName:'id'}, {aaData: aDataSetWithID});
+    it('selects a row after click on any cell of the row when sSelectionTrigger = "row"', function(){
+        initDataTable({sSelectionTrigger: 'row', sIdColumnName:'id'}, {aaData: aDataSetWithID});
 
         var $checkboxes = findColCheckboxes();
         var $row = $($checkboxes[1]).closest('tr');

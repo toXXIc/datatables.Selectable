@@ -50,7 +50,7 @@ html[xmlns] .clearfix {
 
 body {
     font: normal normal normal 69%/160% 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
-    font-size: 12pt;
+    font-size: 11pt;
     background: #F5F5F5;
     color: #444444;
 }
@@ -168,7 +168,7 @@ h1, h2, h3, b, strong {
 input, textarea, select {
     outline: none;
     width: 300px;
-    font-size: 14pt;
+    font-size: 12pt;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -178,7 +178,7 @@ input[type=checkbox], input[type=radio] {
 form label, form .label-gap {
     display: inline-block;
     margin: 4px 8px;
-    width: 150px;
+    width: 180px;
     vertical-align: middle;
 }
 
@@ -326,6 +326,21 @@ table.styled tbody tr.selected td {
     font-weight: bold;
 }
 
+.form_buttons {
+    height: 32px;
+}
+
+.small {
+    width: 60px;
+}
+
+.medium {
+    width: 160px;
+}
+
+.fr {
+    float: right;
+}
 
 
 /* Data tables styles */

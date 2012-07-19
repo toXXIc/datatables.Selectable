@@ -14,7 +14,7 @@
         bSingleRowSelect:   false,      // Set to true if only one row at a time can be selected
         bSelectAllCheckbox: false,      // When true, a checkbox will be rendered in column header,
                                           // which will select/deselect all rows on current page
-        sSelectTrigger:     'checkbox', // Determines an area which should be clicked to select a row.
+        sSelectionTrigger:     'checkbox', // Determines an area which should be clicked to select a row.
                                           // Available options: 'checkbox', 'cell', 'row'
 
         // Classes customization
@@ -224,7 +224,7 @@
     Selectable.prototype._fnInit = function () {
         var that = this;
 
-        if (this.options.bSelectAllCheckbox)
+        if (this.options.bSelectAllCheckbox && !this.options.bSingleRowSelect)
         this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoInitComplete',
             function() {
                 var $cell = $(that.oDTSettings.nTHead).find('tr :nth-child(' + that.options.iColNumber + ')');
@@ -378,11 +378,11 @@
                   this, // Custom data - this points to DataTable object
                   this._oSelectable._onCheckboxChanged);
 
-        // Now check sSelectTrigger and bind additional handlers if necessary.
+        // Now check sSelectionTrigger and bind additional handlers if necessary.
         var $trigger = null;
-        if (opts.sSelectTrigger == 'cell')
+        if (opts.sSelectionTrigger == 'cell')
             $trigger = $cell;
-        else if (opts.sSelectTrigger == 'row')
+        else if (opts.sSelectionTrigger == 'row')
             $trigger = $row;
 
         if ($trigger) {
