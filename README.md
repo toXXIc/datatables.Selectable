@@ -15,7 +15,7 @@ Usage
 -----
 
 Selectable is a feature plugin, so it can be enabled by adding 'S' character to 
-datatables `sDom` option. Plugin options can be specified in `oSelectable` option:
+datatable `sDom` option. Plugin options can be specified in `oSelectable` option:
 
 ```js
 var dTable = $('#mytable').dataTable({
@@ -29,7 +29,8 @@ var dTable = $('#mytable').dataTable({
 ```
 
 After initialization Selectable plugin adds oSelection object to the datatable. 
-This object can be used to retrieve and manipulate selection:
+This object can be used to manipulate selection:
+
 ```js
 // Get selection object
 var selection = dTable.oSelection;
@@ -37,7 +38,7 @@ var selection = dTable.oSelection;
 // Get total number of selected rows
 var selCount = selection.fnGetSize();
 
-// Add record with ID = 12 to selection
+// Add record with ID = 12 to the selection
 selection.fnAdd(12);
 
 // Get all selected record IDs
@@ -46,42 +47,43 @@ var ids = selection.getIds();
 
 You can see the demo in examples.html.
 
+
 Plugin options
 --------------
 
-All options are optional.
-
-`iColNumber` *Default: `1`.*
+`iColNumber` *Default: 1.*
     Number of a column that will contain row selection checkboxes.
 
-`sIdColumnName` *Default: `null`.*
+`sIdColumnName` *Default: null.*
     The name of row column that contains unique record ID. This parameter is required 
     if datatable uses server-side data.
 
-`bShowControls` *Default: `true`*. 
+`bShowControls` *Default: true*. 
     Selection controls will be shown if this option is set to true.
 
-`bSingleRowSelect` *Default: `false`*.
+`bSingleRowSelect` *Default: false*.
     Only single row can be selected when this option is set to true.
 
-`bSelectAllCheckbox` *Default: `false`*
+`bSelectAllCheckbox` *Default: false*
     Adds a checkbox to column header, which will select/deselect all 
-    rows on the current page of the table. This option requires 
-    [jquery.groupToggle](https://github.com/toXXIc/jquery.groupToggle) plugin.
+    rows on the current page of the table. When this option is set to true,
+    Selectable uses [jquery.groupToggle](https://github.com/toXXIc/jquery.groupToggle) 
+    plugin, so make sure it's loaded.
 
-`sSelectionTrigger` *Default: `'checkbox'`*.
+`sSelectionTrigger` *Default: 'checkbox'*.
     Determines an area which should be clicked to select a row.
-    Available options: 
-      *  `'checkbox'` - a row will be selected only when selection checkbox is clicked.
-      *  `'cell'` - a row will be selected when user clicks on a cell that contains selection checkbox.
-      *  `'row'` - a row is selected when user clicks on any cell of the row.
+    Available options:
+ 
+*  _'checkbox'_ - a row will be selected only when selection checkbox is clicked.
+*  _'cell'_ - a row will be selected when user clicks on a cell that contains selection checkbox.
+*  _'row'_ - a row is selected when user clicks on any cell of the row.
     
 
-`sSelectedRowClass` *Default: `'selected'`.*
-    A class that will be added to every selected row.
+`sSelectedRowClass` *Default: 'selected'.*
+    A class that will be added to &lt;tr&gt; element of every selected row.
 
-`sControlsClass` *Default: `'dataTables_selectionControls'`.*
-    A class name of the html element that contains all selection controls.
+`sControlsClass` *Default: 'dataTables_selectionControls'.*
+    A style class for the html element that contains all selection controls.
 
 
 Internationalization
@@ -109,69 +111,54 @@ var dTable = $('#mytable').dataTable({
 oSelection methods
 ------------------
 
-## Test
 
-### Test
+### fnAdd(mData)
+Adds a row to selection and updates its appearance. Record ID may be passed
+only when option 'sIdColumnName' is sepecified.
 
-#### Test
-
-##### Test 
-
-    /**
-     * Returns an array that contains data of selected rows.
-     * When sIdColumnName is specified, this method returns null.
-     * @return Array Array with selected data.
-     */ 
-    Selection.prototype.fnGetData = function () {
-    };
+**Parameters:**
+* `mData` Row data or record ID that identifies a row which should be selected.
 
 
-    /**
-     * Returns an array that contains record IDs of selected rows.
-     * This method returns null when sIdColumnName is NOT specified.
-     * @return Array Array with selected record IDs.
-     */
-    Selection.prototype.fnGetIds = function () {
-    };
+### fnClear()
+Clears the selection.
 
 
-    /**
-     * Returns total number of selected rows.
-     * @return integer Total number of selected rows.
-     */
-    Selection.prototype.fnGetSize = function () {
-    };
+### fnGetData()
+Returns an array that contains data of selected rows.
+This method returns null, when `sIdColumnName` is specified.
 
+**Returns:** Array with selected rows data or null if `sIdColumnName` option is set.
+
+
+### fnGetIds()
+Returns an array that contains record IDs of selected rows.
+This method returns null when `sIdColumnName` is NOT specified.
+
+
+### fnGetSize()
+Returns total number of selected rows.
     
-    /**
-     * Checks if the row identified by passed row data or row ID is selected.
-     * @param mData Row data or record ID.
-     * @return True if passed row data or record ID is in the selection.
-     */
-    Selection.prototype.fnIsSelected = function (mData) {
-    };
+
+### fnIsSelected(mData) 
+Checks if the row identified by passed row data or record ID is selected.
+Record ID may be specified only when `sIdColumnName` option is specified.
+
+**Parameters:**
+* `mData` Row data or record ID.
+
+**Returns:** True if a row identified by passed row data or record ID is selected.
+       
+
+### fnRemove(mData)
+Removes data from selection and updates appearance of associated row.
+
+**Parameters:** 
+* `mData` Row data or record ID that identifies a row which should be removed from selection.
 
 
-    /**
-     * Adds data to selection and updates appearance of associated row.
-     * When options 'sIdColumnName' is set and mData is a row data object, 
-     * only value of ID column will be stored in selection.
-     * @param mData Data which should be stored in selection array.
-     */
-    Selection.prototype.fnAdd = function (mData) {
-    };
 
+License
+-------
 
-    /**
-     * Removes data from selection and updates appearance of associated row.
-     * @param mData Row data or record ID which should be removed from selection.
-     */
-    Selection.prototype.fnRemove = function (mData) {
-    };
-
-
-    /**
-     * Clears the selection.
-     */
-    Selection.prototype.fnClear()
-
+This code is free to use under the terms of the MIT license.
