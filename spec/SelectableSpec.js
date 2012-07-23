@@ -11,6 +11,13 @@ describe("DataTables.Selectable (default options)", function() {
         expect(dTable.oSelection).not.toBe(null);
         expect(typeof dTable.oSelection).toBe('object');
     });
+
+    it('returns dataTable with oSelection after calling dataTable()', function(){
+        var dt = $table.dataTable();
+
+        expect(typeof dt.oSelection).toBe('object');
+    });
+
 	
 	
 	it('adds checkboxes to first column', function() {
