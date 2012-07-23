@@ -1,9 +1,9 @@
 /*
- * Selectable is a feature plugin that adds ability to select rows in a datatable.
+ * Selectable is a feature plugin for DataTables that provides ability to select rows.
  *
  * Author:      Basil Gren
  * License:     MIT
- * Version:     1.0.0 (15-Jul-2012)
+ * Version:     1.0.1 (24-Jul-2012)
  */
 (function ($) {
 
@@ -16,6 +16,8 @@
                                           // which will select/deselect all rows on current page
         sSelectionTrigger:     'checkbox', // Determines an area which should be clicked to select a row.
                                           // Available options: 'checkbox', 'cell', 'row'
+
+        fnSelectionChanged: null,       // Called every time selection is changed
 
         // Classes customization
         sSelectedRowClass:'selected',   // A class which will be added to <tr> element of selected rows.
@@ -137,6 +139,8 @@
             
         this._aoData.push(mData);
         this._fnUpdate(mData);
+
+        this._oSelectable._fnSelectionChanged();
     };
 
 
@@ -154,6 +158,8 @@
             if (this._aoData[i] == mData) {
                 this._aoData.splice(i, 1);
                 this._fnUpdate(mData);
+
+                this._oSelectable._fnSelectionChanged();
                 break;
             }
         }
@@ -164,8 +170,13 @@
      * Clears the selection.
      */
     Selection.prototype.fnClear = function() {
+        if (this._aoData.length == 0)
+            return;
+
         this._aoData = [];
         this._oSelectable._fnUnselectAll();
+
+        this._oSelectable._fnSelectionChanged();
     };
 
 
@@ -224,6 +235,8 @@
     Selectable.prototype._fnInit = function () {
         var that = this;
 
+        this._massChange = false;
+
         if (this.options.bSelectAllCheckbox && !this.options.bSingleRowSelect)
         this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoInitComplete',
             function() {
@@ -232,7 +245,16 @@
                 that.$selectAll = $selectAll;
 
                 $selectAll.groupToggle({
-                    groupParent: $(that.oDTSettings.nTBody)
+                    groupParent: $(that.oDTSettings.nTBody),
+
+                    onBeforeChange: function() {
+                        that._massChange = true; // Set mass change flag to ignore multiple update events.
+                    },
+                    onChanged: function() {
+                        that._massChange = false;
+
+                        that._fnSelectionChanged();
+                    }
                 });
 
                 $cell.html($selectAll);
@@ -402,6 +424,15 @@
         $cell.empty().append($check);
         if (this.oSelection.fnIsSelected(aData))
             this._oSelectable._fnSetRowAppearance($row, true);
+    };
+
+
+    Selectable.prototype._fnSelectionChanged = function() {
+        if (this._massChange)
+            return;
+
+        if (typeof this.options.fnSelectionChanged == 'function')
+            this.options.fnSelectionChanged(this.oSelection);
     };
 
 

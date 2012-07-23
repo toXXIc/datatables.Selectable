@@ -23,7 +23,12 @@ var dTable = $('#mytable').dataTable({
     oSelectable: {
         iColNumber:1,
         sIdColumnName: 'id',
-        bShowControls: true
+        bShowControls: true,
+
+        fnSelectionChanged: function(selection) {
+            if (selection.fnGetSize() > 0)
+                doSomething();
+        }
     }
 });
 ```
@@ -70,14 +75,18 @@ Plugin options
     Selectable uses [jquery.groupToggle](https://github.com/toXXIc/jquery.groupToggle) 
     plugin, so make sure it's loaded.
 
-`sSelectionTrigger` *Default: 'checkbox'*.
+`sSelectionTrigger` *Default: 'checkbox'.*
     Determines an area which should be clicked to select a row.
     Available options:
  
 *  _'checkbox'_ - a row will be selected only when selection checkbox is clicked.
 *  _'cell'_ - a row will be selected when user clicks on a cell that contains selection checkbox.
 *  _'row'_ - a row is selected when user clicks on any cell of the row.
-    
+
+`fnSelectionChanged` *Default: null.*
+    A callback function that will be called every time selection is changed. Callback receives one parameter -
+    selection object.
+
 
 `sSelectedRowClass` *Default: 'selected'.*
     A class that will be added to &lt;tr&gt; element of every selected row.

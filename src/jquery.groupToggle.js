@@ -7,7 +7,7 @@
  * Copyright (c) 2012 Basil Gren
  * Released under the MIT license.
  *
- * @version 1.0.0, 29-May-2012
+ * @version 1.0.1, 24-Jul-2012
  */
 
 (function ($) {
@@ -17,7 +17,10 @@
         filter:null, // Filter
         groupParent:null, // Parent of checkbox group. Filter is applied to parent. Default parent is <body> element
         toggleOffClass:'',
-        toggleOnClass:'checked'
+        toggleOnClass:'checked',
+
+        onBeforeChange: null, // Callback is called before a group of checkboxes will be changed.
+        onChanged: null       // Callback is called after all group of checkboxes is changed.
     };
 
 
@@ -170,6 +173,10 @@
 
         function setGroupState($group, state) {
             internalUpdate = true;
+
+            if (typeof options.onBeforeChange == 'function')
+                options.onBeforeChange();
+
             for (var i = 0, count = $group.length; i < count; i++) {
                 var checkbox = $group[i];
                 // Process one by one, because we need to check what checkbox is changed and which is none.
@@ -186,6 +193,9 @@
             internalUpdate = false;
 
             syncToggle();
+
+            if (typeof options.onChanged == 'function')
+                options.onChanged();
         }
 
 

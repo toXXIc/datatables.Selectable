@@ -75,6 +75,14 @@ describe("DataTables.Selectable (default options)", function() {
 // DataTable should be initialized in each test using 
 // initDataTable function with custom Selectable options.
 describe("DataTables.Selectable (custom options)", function() {
+
+    var callbackStubs = {
+        fnSelectionChanged: function(selection) {
+            selection.fnGetSize();
+        }
+    };
+
+
     it('adds checkboxes to any column', function() {
         initDataTable({iColNumber: 2});
         
@@ -176,6 +184,53 @@ describe("DataTables.Selectable (custom options)", function() {
         var selected = dTable.oSelection.fnGetIds();
         expect(selected).toEqual([2]);
     });
+
+
+    it('calls fnSelectionChanged callback after selection is changed', function(){
+        spyOn(callbackStubs, 'fnSelectionChanged');
+
+        initDataTable({sSelectionTrigger: 'row', sIdColumnName:'id',
+                       fnSelectionChanged: callbackStubs.fnSelectionChanged},
+                      {aaData: aDataSetWithID});
+
+        var $checkboxes = findColCheckboxes();
+        var $cell = $($checkboxes[1]).closest('td');
+        $cell.click().click();  // Select and deselect row
+
+        expect(callbackStubs.fnSelectionChanged).toHaveBeenCalledWith(dTable.oSelection);
+        expect(callbackStubs.fnSelectionChanged.calls.length).toEqual(2);
+    });
+
+
+    it('calls fnSelectionChanged callback after fnClear', function(){
+        spyOn(callbackStubs, 'fnSelectionChanged');
+
+        initDataTable({sSelectionTrigger: 'row', sIdColumnName:'id',
+                        fnSelectionChanged: callbackStubs.fnSelectionChanged},
+                        {aaData: aDataSetWithID});
+
+        // Firstly call fnClear when nothing is selected.
+        dTable.oSelection.fnClear(); // Callback shouldn't be called.
+        selectionAddRow(2); // Callback should be called
+        dTable.oSelection.fnClear(); // And here callback should be called.
+
+        expect(callbackStubs.fnSelectionChanged.calls.length).toEqual(2);
+    });
+
+
+    it('calls fnSelectionChanged once after Select All checkbox is clicked.', function(){
+        spyOn(callbackStubs, 'fnSelectionChanged');
+
+        initDataTable({sSelectionTrigger: 'row', sIdColumnName:'id',
+                fnSelectionChanged: callbackStubs.fnSelectionChanged, bSelectAllCheckbox: true},
+            {aaData: aDataSetWithID});
+
+        var $selectAll = getSelectAllCheckbox();
+        $selectAll.click().click();
+
+        expect(callbackStubs.fnSelectionChanged.calls.length).toEqual(2);
+    });
+
 
 
 });
