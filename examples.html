@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>datatables.Selectable - Examples</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+    <script type="text/javascript" src="lib/jquery.js"></script>
+    <script type="text/javascript" src="lib/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="spec/sampleData.js"></script>
+    <script type="text/javascript" src="src/datatables.Selectable.js"></script>
+    <script type="text/javascript" src="src/jquery.groupToggle.js"></script>
+</head>
+
+<body>
+<div id="content">
+    <div class="wrapper">
+        <div class="title-box">
+            <h1>Selectable feature for DataTables</h1>
+            A feature plugin for DataTables that makes table rows selectable.
+        </div>
+        <h2>Examples</h2>
+        <div class="box">
+            <form action="#" id="options_form">
+                <label for="iColNumber">Column number</label>
+                <select id="iColNumber" name="iColNumber" class="small">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label for="sSelectionTrigger">Selection trigger</label>
+                <select id="sSelectionTrigger" name="sSelectionTrigger" class="medium">
+                    <option value="checkbox">checkbox</option>
+                    <option value="cell">cell</option>
+                    <option value="row">row</option>
+                </select>
+
+                <br/>
+                <input type="checkbox" value="1" id="bShowControls" name="bShowControls" checked="checked" />
+                <label for="bShowControls">Show controls</label>
+                <br/>
+                <input type="checkbox" value="1" id="bSingleRowSelect" name="bSingleRowSelect" />
+                <label for="bSingleRowSelect">Single row select</label>
+                <br/>
+                <input type="checkbox" value="1" id="bSelectAllCheckbox" name="bSelectAllCheckbox" checked="checked" />
+                <label for="bSelectAllCheckbox">"Select All" checkbox</label>
+
+                <hr/>
+                <div class="form_buttons">
+                    <a href="#" id="apply_button" class="button button-gray fr">Apply options</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="box">
+            <table border="0" class="styled" id="example" width="100%"></table>
+        </div>
+        <hr/>
+    </div>
+    <br/>
+</div>
+
+<script type="text/javascript">
+$(function(){
+
+    var defaults = {
+        iColNumber:         1,          // Number of columns that will contain selection checkboxes.
+        sIdColumnName:      null,       // Name of column that contains unique record ID.
+        bShowControls:      true,       // Determines if selection controls (size etc) will be shown
+        bSingleRowSelect:   false,      // Set to true if only one row at a time can be selected
+        bSelectAllCheckbox: false,      // When true, a checkbox will be rendered in column header,
+                                          // which will select/deselect all rows on current page
+        sSelectionTrigger:     'checkbox', // Determines an area which should be clicked to select a row.
+                                          // Available options: 'checkbox', 'cell', 'row'
+
+        // Classes customization
+        sSelectedRowClass:'selected',   // A class which will be added to <tr> element of selected rows.
+        sControlsClass: 'dataTables_selectionControls', // Default class for selection controls.
+
+        // I18n options
+        oLanguage: {
+            sSelectedRows: 'Selected rows: _COUNT_', // Text for selection size counter
+            sClearSelection: 'Clear selection'       // Text for 'Clear selection' link
+        }
+    };
+
+
+    function initDataTable(options){
+
+        if (!options)
+            options = defaults;
+
+        var dt = $('#example').dataTable({
+            bDestroy: true,
+            "aaData": aDataSet,
+            "aoColumns": [
+                { "sTitle": "", bSortable: false },
+                { "sTitle": "Cost" },
+                { "sTitle": "Platform" },
+                { "sTitle": "Version", "sClass": "center" },
+                {
+                    "sTitle": "Grade",
+                    "sClass": "center"
+                }
+            ],
+            sDom: '	lfrtipS',
+
+            oSelectable: options
+        });
+    }
+    
+    
+    function collectFormOptions() {
+        var options = defaults;
+        var $form = $('#options_form');
+        $form.find('input, select').each(function(index, elem){
+            var $elem = $(elem);
+            var name = $elem.attr('name');
+            if (name)
+            {
+                var value;
+                if ((elem.tagName == 'INPUT') && ($elem.is(':checkbox')))
+                    value = $elem.is(':checked');
+                else
+                    value = $elem.val();
+
+                options[name] = value;
+            }
+        });
+
+        return options;
+    }
+    
+
+    $("#apply_button").on('click', function(evt){
+        var options = collectFormOptions();
+        initDataTable(options);
+        evt.preventDefault();
+    });
+    
+
+    initDataTable(collectFormOptions());
+
+
+});
+</script>
+</body>
+</html>
