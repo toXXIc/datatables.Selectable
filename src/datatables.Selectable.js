@@ -3,7 +3,7 @@
  *
  * Author:      Basil Gren
  * License:     MIT
- * Version:     1.0.1 (24-Jul-2012)
+ * Version:     1.0.2 (25-Jul-2012)
  */
 (function ($) {
 
