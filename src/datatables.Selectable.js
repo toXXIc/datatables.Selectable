@@ -32,20 +32,6 @@
 
 
     /**
-     * Returns an array that contains all keys from specitfied hash.
-     * @param hash Hash which keys should be collected into array.
-     * @return Array Array that contains all keys of specified hash.
-     */
-    function getKeys(hash) {
-        var keys = [];
-        for (var i in hash) if (hash.hasOwnProperty(i))
-            keys.push(i);
-
-        return keys;
-    }
-
-
-    /**
      * Object that provides methods to work with selected rows.
      * @param parentSelectable A parent Selectable object.
      */
@@ -387,7 +373,7 @@
     /**
      * Callback that is bound to RowCallback.
      */
-    Selectable.prototype._fnRowCallback = function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+    Selectable.prototype._fnRowCallback = function (nRow, aData) {
         var selectable = this.fnSettings()._oSelectable;
         var opts = selectable.options; // this -> dataTable
         var $row = $(nRow);
@@ -418,7 +404,7 @@
             });
 
             // Performance??? Consider replacing by .on handler, bound to tbody.
-            $trigger.on('click', function(evt) {
+            $trigger.on('click', function() {
                 // Click checkbox to toggle it.
                 $check.click();
             });
