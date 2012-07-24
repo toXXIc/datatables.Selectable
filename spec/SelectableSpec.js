@@ -7,15 +7,16 @@ describe("DataTables.Selectable (default options)", function() {
 
 
     it('adds oSelection object to dataTable API', function () {
-        expect(dTable.oSelection).toBeDefined();
-        expect(dTable.oSelection).not.toBe(null);
-        expect(typeof dTable.oSelection).toBe('object');
+        var selection = dTable.fnGetSelection();
+        expect(selection).toBeDefined();
+        expect(selection).not.toBe(null);
+        expect(typeof selection).toBe('object');
     });
 
     it('returns dataTable with oSelection after calling dataTable()', function(){
         var dt = $table.dataTable();
 
-        expect(typeof dt.oSelection).toBe('object');
+        expect(typeof dt.fnGetSelection()).toBe('object');
     });
 
 	
@@ -61,7 +62,7 @@ describe("DataTables.Selectable (default options)", function() {
         selectionAdd(2);
         selectionAdd(4);
 
-        var text = dTable._oSelectable.nCounter.innerHTML;
+        var text = dTable.fnSettings()._oSelectable.nCounter.innerHTML;
 
         expect(text).toEqual("Selected rows: 2");
     });
@@ -71,9 +72,9 @@ describe("DataTables.Selectable (default options)", function() {
         selectionAdd(2);
         selectionAdd(4);
 
-        $(dTable._oSelectable.nControls).find('a.selection_clear').click();
+        $(dTable.fnSettings()._oSelectable.nControls).find('a.selection_clear').click();
 
-        expect(dTable.oSelection.fnGetSize()).toBe(0);
+        expect(dTable.fnGetSelection().fnGetSize()).toBe(0);
     });
 });
 
@@ -133,7 +134,7 @@ describe("DataTables.Selectable (custom options)", function() {
         selectionAdd(2);  // Row index 2 - ID = 3
         selectionAdd(4);  // Row index 4 - ID = 5
 
-        var selected = dTable.oSelection.fnGetIds();
+        var selected = dTable.fnGetSelection().fnGetIds();
         expect(selected).toEqual([5]);
     });
 
@@ -176,7 +177,7 @@ describe("DataTables.Selectable (custom options)", function() {
         var $cell = $($checkboxes[1]).closest('td');
         $cell.click();
 
-        var selected = dTable.oSelection.fnGetIds();
+        var selected = dTable.fnGetSelection().fnGetIds();
         expect(selected).toEqual([2]);
     });
 
@@ -188,7 +189,7 @@ describe("DataTables.Selectable (custom options)", function() {
         var $row = $($checkboxes[1]).closest('tr');
         $row.find('td:nth-child(3)').click();
 
-        var selected = dTable.oSelection.fnGetIds();
+        var selected = dTable.fnGetSelection().fnGetIds();
         expect(selected).toEqual([2]);
     });
 
@@ -204,7 +205,7 @@ describe("DataTables.Selectable (custom options)", function() {
         var $cell = $($checkboxes[1]).closest('td');
         $cell.click().click();  // Select and deselect row
 
-        expect(callbackStubs.fnSelectionChanged).toHaveBeenCalledWith(dTable.oSelection);
+        expect(callbackStubs.fnSelectionChanged).toHaveBeenCalledWith(dTable.fnGetSelection());
         expect(callbackStubs.fnSelectionChanged.calls.length).toEqual(2);
     });
 
@@ -217,9 +218,9 @@ describe("DataTables.Selectable (custom options)", function() {
                         {aaData: aDataSetWithID});
 
         // Firstly call fnClear when nothing is selected.
-        dTable.oSelection.fnClear(); // Callback shouldn't be called.
+        dTable.fnGetSelection().fnClear(); // Callback shouldn't be called.
         selectionAddRow(2); // Callback should be called
-        dTable.oSelection.fnClear(); // And here callback should be called.
+        dTable.fnGetSelection().fnClear(); // And here callback should be called.
 
         expect(callbackStubs.fnSelectionChanged.calls.length).toEqual(2);
     });
@@ -249,7 +250,7 @@ describe("oSelection", function() {
     beforeEach(function () {
         initDataTable();
 
-        selection = dTable.oSelection;
+        selection = dTable.fnGetSelection();
     });
 
 
@@ -329,7 +330,7 @@ describe('oSelection (with sIdColumnName)', function() {
     beforeEach(function () {
         initDataTable({sIdColumnName: 'id'}, {"aaData": aDataSetWithID});
 
-        selection = dTable.oSelection;
+        selection = dTable.fnGetSelection();
     });
 
 

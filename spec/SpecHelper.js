@@ -86,7 +86,7 @@ function removeDataTable() {
 function selectionAdd(dataIndex)
 {
     var data = dTable.fnGetData()[dataIndex];
-    dTable.oSelection.fnAdd(data);
+    dTable.fnGetSelection().fnAdd(data);
     return data;
 }
 
@@ -112,7 +112,7 @@ function selectionAddRow(rowNum)
 {
     var $row = getRow(rowNum);
     var data = dTable.fnGetData($row[0]);
-    dTable.oSelection.fnAdd(data);
+    dTable.fnGetSelection().fnAdd(data);
 
     return $row;
 }
@@ -144,7 +144,7 @@ beforeEach(function() {
         toBeCheckedRow: function() {
             var $row = this.actual;
 
-            var colNum = dTable._oSelectable.options.iColNumber;
+            var colNum = dTable.fnSettings()._oSelectable.options.iColNumber;
             var $check = $row.find('td:nth-child(' + colNum + ') input:checkbox');
                 
             var hasClass = $row.hasClass(SELECTION_CLASS);
@@ -171,7 +171,7 @@ beforeEach(function() {
 
         toBeUncheckedRow: function() {
             var $row = this.actual;
-            var colNum = dTable._oSelectable.options.iColNumber;
+            var colNum = dTable.fnSettings()._oSelectable.options.iColNumber;
             var $check = $row.find('td:nth-child(' + colNum + ') input:checkbox');
             
             var hasClass = $row.hasClass(SELECTION_CLASS);

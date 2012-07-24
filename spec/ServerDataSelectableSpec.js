@@ -45,9 +45,9 @@ describe("DataTables.Selectable (server data with ID column)", function() {
 
     it('adds oSelection object to dataTable API', function() {
         runs(function(){
-            expect(dTable.oSelection).toBeDefined();
-            expect(dTable.oSelection).not.toBe(null);
-            expect(typeof dTable.oSelection).toBe('object');
+            expect(dTable.fnGetSelection()).toBeDefined();
+            expect(dTable.fnGetSelection()).not.toBe(null);
+            expect(typeof dTable.fnGetSelection()).toBe('object');
         });
     });
 

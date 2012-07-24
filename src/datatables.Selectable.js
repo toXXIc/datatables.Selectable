@@ -187,19 +187,21 @@
      * Selectable object provides interaction between Selection and DataTable.
      */
     function Selectable(oDTSettings, options) {
-        var dTable = oDTSettings.oInstance; // Should be local variable
-        this.oTable = dTable;
-
-        this.oDTSettings = oDTSettings;
+        
         this.options = $.extend({}, defaults, options);
 
+        this.oTable = oDTSettings.oInstance;
+        
         // Add oSelection object to current datatable instance.
         this.oSelection = new Selection(this);
-        dTable.oSelection = this.oSelection;
+        
+        this.oDTSettings = oDTSettings;
+        oDTSettings.oSelection = this.oSelection;
+
         this.oSelection._sIdColumnName = options.sIdColumnName;
 
         // Also, store Selectable object in current instance
-        dTable._oSelectable = this;
+        oDTSettings._oSelectable = this;
 
         this.$selectAll = null;
 
@@ -213,7 +215,7 @@
             var $counter = $controls.find('.selection_counter');
             var $resetLink = $('<a class="selection_clear">' + this.options.oLanguage.sClearSelection + '</a>');
             $resetLink.on('click', function() {
-                dTable.oSelection.fnClear();
+                oDTSettings.oSelection.fnClear();
             });
 
             $controls.append($resetLink);
@@ -306,9 +308,9 @@
         var rowData = dTable.fnGetData($row[0]);
 
         if ($(this).is(':checked'))
-            dTable.oSelection.fnAdd(rowData);
+            dTable.fnGetSelection().fnAdd(rowData);
         else
-            dTable.oSelection.fnRemove(rowData);
+            dTable.fnGetSelection().fnRemove(rowData);
     };
 
 
@@ -386,7 +388,8 @@
      * Callback that is bound to RowCallback.
      */
     Selectable.prototype._fnRowCallback = function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        var opts = this._oSelectable.options; // this -> dataTable
+        var selectable = this.fnSettings()._oSelectable;
+        var opts = selectable.options; // this -> dataTable
         var $row = $(nRow);
         var $cell = $row.find('td:nth-child(' + opts.iColNumber + ')');
 
@@ -398,7 +401,7 @@
         $check = $('<input type="checkbox" />');
         $check.on('change',
                   this, // Custom data - this points to DataTable object
-                  this._oSelectable._onCheckboxChanged);
+                  selectable._onCheckboxChanged);
 
         // Now check sSelectionTrigger and bind additional handlers if necessary.
         var $trigger = null;
@@ -422,8 +425,8 @@
         }
 
         $cell.empty().append($check);
-        if (this.oSelection.fnIsSelected(aData))
-            this._oSelectable._fnSetRowAppearance($row, true);
+        if (this.fnGetSelection().fnIsSelected(aData))
+            selectable._fnSetRowAppearance($row, true);
     };
 
 
@@ -455,6 +458,12 @@
 
         sFeature: "Selectable"
     });
+    
+    
+    // Register API function that will return selection object.
+    $.fn.dataTableExt.oApi.fnGetSelection = function (oSettings) {
+        return oSettings.oSelection;
+    };
 
 
 })(jQuery);

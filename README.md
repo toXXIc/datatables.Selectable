@@ -33,12 +33,12 @@ var dTable = $('#mytable').dataTable({
 });
 ```
 
-After initialization Selectable plugin adds oSelection object to the datatable. 
-This object can be used to manipulate selection:
+After initialization Selectable plugin adds fnGetSelection() function to the datatable. 
+This function returns selection object that can be used to manipulate selection:
 
 ```js
 // Get selection object
-var selection = dTable.oSelection;
+var selection = dTable.fnGetSelection();
 
 // Get total number of selected rows
 var selCount = selection.fnGetSize();
