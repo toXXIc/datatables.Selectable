@@ -17,7 +17,7 @@ var commonDefaults = {
             "sClass": "center"
         }
     ],
-    sDom: 'lfrtipS'
+    sDom: 'lfrtipL'
 };
 
 

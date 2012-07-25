@@ -440,7 +440,7 @@
             return selectable.nControls;
         },
 
-        cFeature: "S",
+        cFeature: "L",
 
         sFeature: "Selectable"
     });

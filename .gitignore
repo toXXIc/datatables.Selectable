@@ -169,3 +169,5 @@ pip-log.txt
 *.iml
 *.pnproj
 *.pnps
+*.ipr
+*.iws

@@ -14,12 +14,12 @@ if Selectable is used with bSelectAllCheckbox = true
 Usage
 -----
 
-Selectable is a feature plugin, so it can be enabled by adding 'S' character to 
+Selectable is a feature plugin, so it can be enabled by adding 'L' character to
 datatable `sDom` option. Plugin options can be specified in `oSelectable` option:
 
 ```js
 var dTable = $('#mytable').dataTable({
-    sDom: 'lfrtipS',
+    sDom: 'lfrtipL',
     oSelectable: {
         iColNumber:1,
         sIdColumnName: 'id',
@@ -102,7 +102,7 @@ Text of selection controls can be changed by specifying `oLanguage` option for S
 
 ```js
 var dTable = $('#mytable').dataTable({
-    sDom: 'lfrtipS',
+    sDom: 'lfrtipL',
     oSelectable: {
         oLanguage: {
             // Text for selection size counter. _COUNT_ placeholder will be 
