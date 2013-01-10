@@ -229,11 +229,12 @@
         this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoInitComplete',
             function() {
                 var $cell = $(that.oDTSettings.nTHead).find('tr :nth-child(' + that.options.iColNumber + ')');
+                var $cells = $(that.oDTSettings.nTBody).find('td:nth-child(' + that.options.iColNumber + ')');
                 var $selectAll = $('<input type="checkbox" />');
                 that.$selectAll = $selectAll;
 
                 $selectAll.groupToggle({
-                    groupParent: $(that.oDTSettings.nTBody),
+                    groupParent: $cells,
 
                     onBeforeChange: function() {
                         that._massChange = true; // Set mass change flag to ignore multiple update events.
