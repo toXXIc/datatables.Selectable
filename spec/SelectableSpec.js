@@ -76,6 +76,8 @@ describe("DataTables.Selectable (default options)", function() {
 
         expect(dTable.fnGetSelection().fnGetSize()).toBe(0);
     });
+
+
 });
 
 // =================================================
@@ -168,6 +170,29 @@ describe("DataTables.Selectable (custom options)", function() {
 
         expect($selectAll.is(':checked')).toBe(false);
     });
+
+
+    it('does not change the state of other checkboxes when Select All is clicked', function(){
+        initDataTable({bSelectAllCheckbox: true});
+
+        var $customCheckboxes = $table.find('tbody td:nth-child(5) input:checkbox');
+        var $check1 = $($customCheckboxes[0]), $check2 = $($customCheckboxes[1]);
+
+        var state1 = $check1.is(':checked');
+        var state2 = $check2.is(':checked');
+        
+        var $selectAll = getSelectAllCheckbox();
+        $selectAll.click();
+
+        expect($check1.is(':checked')).toBe(state1);
+        expect($check2.is(':checked')).toBe(state2);
+
+        // Now clear the selection.
+        $selectAll.click();
+        expect($check1.is(':checked')).toBe(state1);
+        expect($check2.is(':checked')).toBe(state2);
+    });
+
 
 
     it('selects a row after click on a cell containing selection checkbox when sSelectionTrigger = "cell"', function(){
