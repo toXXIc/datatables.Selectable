@@ -256,8 +256,13 @@
 
         this.oDTSettings.oApi._fnCallbackReg(this.oDTSettings, 'aoDrawCallback',
             function(){
-                if (that.$selectAll)
+                if (that.$selectAll) {
                     that.$selectAll.groupToggle('update');
+                    if (that.oTable.fnSettings().fnRecordsDisplay() == 0)
+                        that.$selectAll.hide();
+                    else
+                        that.$selectAll.show();
+                }
             }, 'SelectableDrawCallback');
 
         // Redraw the whole table without refiltering and resorting.
