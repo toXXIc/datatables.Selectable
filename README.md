@@ -3,6 +3,8 @@ About
 
 Selectable is a DataTables plugin that adds ability to select rows in your DataTable.
 
+**NOTE: The plugin is no longer maintained, sorry. Please consider using fully-featured DataTable [Select extension](http://datatables.net/extensions/select/) instead.**
+
 Requirements
 ------------
 
